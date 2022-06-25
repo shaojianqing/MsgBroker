@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/jdbc  
+    http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd">
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://127.0.0.1/Message" />
+		<property name="username" value="postgres" />
+		<property name="password" value="12345678" />
+		<property name="initialSize" value="0" />
+		<property name="maxActive" value="20" />
+		<property name="maxIdle" value="20" />
+		<property name="minIdle" value="0" />
+		<property name="maxWait" value="60000" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations">
+			<array>
+				<value>/sqlmap/Message.xml</value>
+				<value>/sqlmap/MessageConfig.xml</value>
+				<value>/sqlmap/MessageRelation.xml</value>
+				<value>/sqlmap/SubscribeInfo.xml</value>
+			</array>
+		</property>
+	</bean>
+
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager" />
+    </bean>
+	
+	<bean id="messageDao" class="msg.broker.dao.message.impl.MessageDaoImpl">
+		<property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+	</bean>
+
+	<bean id="messageConfigDao" class="msg.broker.dao.config.impl.MessageConfigDaoImpl">
+		<property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+	</bean>
+
+	<bean id="messageRelationDao" class="msg.broker.dao.relation.impl.MessageRelationDaoImpl">
+		<property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+	</bean>
+
+	<bean id="subscribeInfoDao" class="msg.broker.dao.subscribe.impl.SubscribeInfoDaoImpl">
+		<property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+	</bean>
+
+	<bean id="messageService" class="msg.broker.service.impl.MessageServiceImpl">
+		<property name="transactionTemplate" ref="transactionTemplate" />
+		<property name="messageRelationDao" ref="messageRelationDao" />
+		<property name="subscribeInfoDao" ref="subscribeInfoDao" />
+		<property name="messageConfigDao" ref="messageConfigDao" />
+		<property name="messageDao" ref="messageDao" />
+	</bean>
+
+	<bean id="msgProcessor" class="msg.broker.processor.impl.MsgProcessorImpl">
+		<property name="messageService" ref="messageService" />
+		<property name="serverPort" value="8888" />
+		<property name="subscribePort" value="6666" />
+		<property name="confirmPort" value="5555" />
+	</bean>
+
+</beans>

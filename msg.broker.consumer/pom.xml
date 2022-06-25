@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>msg.broker.parent</artifactId>
+        <groupId>msg.broker.parent</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>msg.broker.consumer</groupId>
+    <artifactId>msg.broker.consumer</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>msg.broker.subscriber</groupId>
+            <artifactId>msg.broker.subscriber</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>msg.broker.producer</groupId>
+            <artifactId>msg.broker.producer</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>msg.broker.producer</groupId>
+            <artifactId>msg.broker.producer</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="msg.broker.domain.config.MessageConfig">
+
+	<resultMap id="messageConfigMap" type="msg.broker.domain.config.MessageConfig">
+		<result property="id" column="id" javaType="java.lang.String" />
+		<result property="topicCode" column="topicCode" javaType="java.lang.String" />
+		<result property="eventCode" column="eventCode" javaType="java.lang.String" />
+		<result property="description" column="description" javaType="java.lang.String" />
+		<result property="isValid" column="isValid" javaType="java.lang.Short" />
+		<result property="createTime" column="createTime" javaType="java.sql.Timestamp" />
+		<result property="operateTime" column="operateTime" javaType="java.sql.Timestamp" />
+	</resultMap>
+
+	<select id="getMessageConfigById" resultMap="messageConfigMap" >
+		select
+			id,
+			topicCode,
+			eventCode,
+			description,
+			isValid,
+			createTime,
+			operateTime
+		from
+			MessageConfig
+		where
+			id = #{id}
+	</select>
+
+	<select id="queryMessageConfigByTopicAndEvent" resultMap="messageConfigMap" >
+		select
+			id,
+			topicCode,
+			eventCode,
+			description,
+			isValid,
+			createTime,
+			operateTime
+		from
+			MessageConfig
+		where
+			topicCode = #{topicCode} and
+			eventCode = #{eventCode}
+	</select>
+
+	<update id="updateMessageConfig" parameterType="msg.broker.domain.config.MessageConfig" >
+
+		update
+			MessageConfig
+		set
+			topicCode = #{topicCode},
+			eventCode = #{eventCode},
+			description = #{description},
+			operateTime = now()
+		where
+			id = #{id}
+	</update>
+
+
+	<insert id="saveMessageConfig" parameterType="msg.broker.domain.config.MessageConfig" >
+
+		insert into MessageConfig(
+			id,
+			topicCode,
+			eventCode,
+			description,
+			isValid,
+			createTime,
+			operateTime)
+		values (
+			#{id},
+			#{topicCode},
+			#{eventCode},
+			#{description},
+			#{isValid},
+			#{createTime},
+			#{operateTime})
+	</insert>
+	
+</mapper>

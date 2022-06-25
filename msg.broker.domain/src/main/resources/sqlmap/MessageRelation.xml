@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="msg.broker.domain.relation.MessageRelation">
+
+	<resultMap id="messageRelationMap" type="msg.broker.domain.relation.MessageRelation">
+		<result property="id" column="id" javaType="java.lang.String" />
+		<result property="messageId" column="messageId" javaType="java.lang.String" />
+		<result property="subscribeInfoId" column="subscribeInfoId" javaType="java.lang.String" />
+		<result property="topicCode" column="topicCode" javaType="java.lang.String" />
+		<result property="eventCode" column="eventCode" javaType="java.lang.String" />
+		<result property="status" column="status" javaType="java.lang.String" />
+		<result property="isValid" column="isValid" javaType="java.lang.Short" />
+		<result property="createTime" column="createTime" javaType="java.sql.Timestamp" />
+		<result property="operateTime" column="operateTime" javaType="java.sql.Timestamp" />
+	</resultMap>
+
+	<select id="getMessageRelationById" resultMap="messageRelationMap" >
+		select
+			id,
+			messageId,
+			subscribeInfoId,
+			topicCode,
+			eventCode,
+			status,
+			isValid,
+			createTime,
+			operateTime
+		from
+			MessageRelation
+		where
+			id = #{id}
+	</select>
+
+	<select id="getMessageRelationByIdForUpdate" resultMap="messageRelationMap" >
+		select
+			id,
+			messageId,
+			subscribeInfoId,
+			topicCode,
+			eventCode,
+			status,
+			isValid,
+			createTime,
+			operateTime
+		from
+			MessageRelation
+		where
+			id = #{id}
+		for update
+	</select>
+
+	<select id="queryMessageRelationOne" resultMap="messageRelationMap" >
+		select
+			id,
+			messageId,
+			subscribeInfoId,
+			topicCode,
+			eventCode,
+			status,
+			isValid,
+			createTime,
+			operateTime
+		from
+			MessageRelation
+		where
+			subscribeInfoId = #{subscribeInfoId} and
+			topicCode = #{topicCode} and
+			eventCode = #{eventCode} and
+			status = #{status}
+	</select>
+
+
+	<update id="updateMessageRelationStatus" parameterType="java.util.Map" >
+
+		update MessageRelation
+		set
+			status = #{newStatus},
+			operateTime = now()
+		where
+			id = #{id} and
+			status = #{oldStatus}
+	</update>
+
+	<insert id="saveMessageRelation" parameterType="msg.broker.domain.relation.MessageRelation" >
+
+		insert into MessageRelation (
+			id,
+			messageId,
+			subscribeInfoId,
+			topicCode,
+			eventCode,
+			status,
+			isValid,
+			createTime,
+			operateTime)
+		values (
+			#{id},
+			#{messageId},
+			#{subscribeInfoId},
+			#{topicCode},
+			#{eventCode},
+			#{status},
+			#{isValid},
+			#{createTime},
+			#{operateTime})
+	</insert>
+	
+</mapper>

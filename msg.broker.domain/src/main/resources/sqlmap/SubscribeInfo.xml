@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="msg.broker.domain.subscribe.SubscribeInfo">
+
+	<resultMap id="subscribeInfoMap" type="msg.broker.domain.subscribe.SubscribeInfo">
+		<result property="id" column="id" javaType="java.lang.String" />
+		<result property="topicCode" column="topicCode" javaType="java.lang.String" />
+		<result property="eventCode" column="eventCode" javaType="java.lang.String" />
+		<result property="groupId" column="groupId" javaType="java.lang.String" />
+		<result property="isValid" column="isValid" javaType="java.lang.Short" />
+		<result property="createTime" column="createTime" javaType="java.sql.Timestamp" />
+		<result property="operateTime" column="operateTime" javaType="java.sql.Timestamp" />
+	</resultMap>
+
+	<select id="getSubscribeInfoById" resultMap="subscribeInfoMap" >
+		select
+			id,
+			topicCode,
+			eventCode,
+			groupId,
+			isValid,
+			createTime,
+			operateTime
+		from
+			SubscribeInfo
+		where
+			id = #{id}
+	</select>
+
+	<select id="getSubscribeInfoByIdForUpdate" resultMap="subscribeInfoMap" >
+		select
+			id,
+			topicCode,
+			eventCode,
+			groupId,
+			isValid,
+			createTime,
+			operateTime
+		from
+			SubscribeInfo
+		where
+			id = #{id}
+		for update
+	</select>
+
+	<select id="querySubscribeInfo" resultMap="subscribeInfoMap" >
+		select
+		id,
+		topicCode,
+		eventCode,
+		groupId,
+		isValid,
+		createTime,
+		operateTime
+		from
+		SubscribeInfo
+		where
+		topicCode = #{topic} and
+		eventCode = #{event}
+	</select>
+
+	<select id="querySubscribeInfoOne" resultMap="subscribeInfoMap" >
+		select
+			id,
+			topicCode,
+			eventCode,
+			groupId,
+			isValid,
+			createTime,
+			operateTime
+		from
+			SubscribeInfo
+		where
+			groupId = #{groupId} and
+			topicCode = #{topic} and
+			eventCode = #{event}
+	</select>
+
+
+	<update id="updateMessageRelationStatus" parameterType="msg.broker.domain.subscribe.SubscribeInfo" >
+
+		update SubscribeInfo
+		set
+			topicCode = #{topicCode},
+			eventCode = #{eventCode},
+			groupId = #{groupId},
+			operateTime = now()
+		where
+			id = #{id}
+	</update>
+
+	<insert id="saveSubscribeInfo" parameterType="msg.broker.domain.subscribe.SubscribeInfo" >
+
+		insert into SubscribeInfo (
+			id,
+			topicCode,
+			eventCode,
+			groupId,
+			isValid,
+			createTime,
+			operateTime)
+		values (
+			#{id},
+			#{topicCode},
+			#{eventCode},
+			#{groupId},
+			#{isValid},
+			#{createTime},
+			#{operateTime})
+	</insert>
+	
+</mapper>

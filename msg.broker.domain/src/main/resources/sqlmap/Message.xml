@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="msg.broker.domain.message.Message">
+
+	<resultMap id="messageMap" type="msg.broker.domain.message.Message">
+		<result property="id" column="id" javaType="java.lang.String" />
+		<result property="topicCode" column="topicCode" javaType="java.lang.String" />
+		<result property="eventCode" column="eventCode" javaType="java.lang.String" />
+		<result property="className" column="className" javaType="java.lang.String" />
+		<result property="messageBody" column="messageBody" javaType="java.lang.String" />
+		<result property="isValid" column="isValid" javaType="java.lang.Short" />
+		<result property="createTime" column="createTime" javaType="java.sql.Timestamp" />
+		<result property="operateTime" column="operateTime" javaType="java.sql.Timestamp" />
+	</resultMap>
+
+	<select id="getMessageById" resultMap="messageMap" >
+		select
+			id,
+			topicCode,
+			eventCode,
+			className,
+			messageBody,
+			isValid,
+			createTime,
+			operateTime
+		from
+			Message
+		where
+			id = #{id}
+	</select>
+
+	<select id="getMessageByIdForUpdate" resultMap="messageMap" >
+		select
+			id,
+			topicCode,
+			eventCode,
+			className,
+			messageBody,
+			isValid,
+			createTime,
+			operateTime
+		from
+			Message
+		where
+			id = #{id}
+		for update
+	</select>
+
+
+	<insert id="saveMessage" parameterType="msg.broker.domain.message.Message" >
+
+		insert into Message(
+			id,
+			topicCode,
+			eventCode,
+			className,
+			messageBody,
+			isValid,
+			createTime,
+			operateTime)
+		values (
+			#{id},
+			#{topicCode},
+			#{eventCode},
+			#{className},
+			#{messageBody},
+			#{isValid},
+			#{createTime},
+			#{operateTime})
+	</insert>
+	
+</mapper>
